@@ -1,0 +1,21 @@
+body {
+  background: rgb(86, 226, 181);
+}
+p {
+  color: black;
+}
+h1 {
+  font-weight: bold;
+}
+
+.custom-button {
+  background-color: #4CAF50;
+  color: #fff;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
