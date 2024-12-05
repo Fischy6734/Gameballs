@@ -1,8 +1,8 @@
-This is a games site with tuns of games to chuse from
+This is a games site with tons of games to choose from
 
 
 New ↓
-(Added new TEST link) on the pokemon section
+(Added new TEST link) on the Pokemon section
 
 added links to send you to a new tab
 
