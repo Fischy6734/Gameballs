@@ -6,4 +6,8 @@ New ↓
 
 added links to send you to a new tab
 
+added Minecraft
+
+Added an ai that gives you games
+
 
