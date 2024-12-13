@@ -1,13 +1,9 @@
 This is a games site with tons of games to choose from
 
 
-New ↓
-(Added new TEST link) on the Pokemon section
+If your reading this on ower website not ower git hub this site is down.
 
-added links to send you to a new tab
+You can make your own on the time of the shut down if you want.
 
-added Minecraft
-
-Added an ai that gives you games
-
+And it still has the ai.
 
