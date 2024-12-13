@@ -1,15 +1,9 @@
 <!DOCTYPE html>
-
-<div class="loader"></div>
-
-<link rel="stylesheet" href="Loading.css">
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="3;url=Home.html"> <!-- Redirects after 3 seconds -->
-    <title>Loading...</title>
+    <title>Loading Screen</title>
     <style>
         body {
             display: flex;
@@ -23,15 +17,35 @@
         .loading-container {
             text-align: center;
         }
-        .loading-message {
+        .loading-text {
             font-size: 24px;
             color: #333;
         }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
+    <script>
+        // Redirect to new HTML page after 3 seconds
+        setTimeout(function() {
+            window.location.href = 'Home.html'; // Replace with your target page
+        }, 3000);
+    </script>
 </head>
 <body>
     <main class="loading-container">
-        
+        <div class="loader"></div>
+        <p class="loading-text">Loading, please wait...</p>
     </main>
 </body>
 </html>
