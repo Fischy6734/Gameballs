@@ -15,17 +15,25 @@
             text-align: center;
             margin-bottom: 20px;
         }
-        section {
-            margin-bottom: 20px;
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         textarea {
             width: 100%;
             height: 150px;
-            margin-bottom: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-family: monospace;
+            resize: none;
+        }
+        #output {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #fff;
+            min-height: 150px;
         }
         button {
             padding: 10px 15px;
@@ -38,13 +46,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        #output {
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: white;
-            border-radius: 4px;
-            min-height: 150px;
-        }
     </style>
 </head>
 <body>
@@ -56,51 +57,58 @@
 <main>
     <section>
         <h2>HTML Code</h2>
-        <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea>
+        <textarea id="htmlInput" placeholder="Write your HTML here..."></textarea>
     </section>
     
     <section>
         <h2>CSS Code</h2>
-        <textarea id="cssInput" placeholder="Write your CSS code here..."></textarea>
+        <textarea id="cssInput" placeholder="Write your CSS here..."></textarea>
     </section>
     
     <section>
         <h2>JavaScript Code</h2>
-        <textarea id="jsInput" placeholder="Write your JavaScript code here..."></textarea>
+        <textarea id="jsInput" placeholder="Write your JavaScript here..."></textarea>
     </section>
     
-    <button id="runBtn">Run Code</button>
-
     <section>
         <h2>Output</h2>
-        <iframe id="output" sandbox="allow-same-origin allow-scripts"></iframe>
+        <div id="output"></div>
     </section>
+    
+    <button id="runButton">Run Code</button>
+    <button id="downloadButton">Download HTML, CSS, and JS</button>
 </main>
 
 <script>
-    document.getElementById('runBtn').addEventListener('click', function() {
+    document.getElementById('runButton').addEventListener('click', function() {
+        const html = document.getElementById('htmlInput').value;
+        const css = `<style>${document.getElementById('cssInput').value}</style>`;
+        const js = `<script>${document.getElementById('jsInput').value}<\/script>`;
+        
+        const outputFrame = document.getElementById('output');
+        outputFrame.innerHTML = html + css + js;
+    });
+
+    document.getElementById('downloadButton').addEventListener('click', function() {
         const html = document.getElementById('htmlInput').value;
         const css = document.getElementById('cssInput').value;
         const js = document.getElementById('jsInput').value;
 
-        const outputFrame = document.getElementById('output');
-        const outputDoc = outputFrame.contentDocument || outputFrame.contentWindow.document;
+        const zip = new JSZip();
+        zip.file("index.html", html);
+        zip.file("style.css", css);
+        zip.file("script.js", js);
 
-        outputDoc.open();
-        outputDoc.write(`
-            <html>
-            <head>
-                <style>${css}</style>
-            </head>
-            <body>
-                ${html}
-                <script>${js}<\/script>
-            </body>
-            </html>
-        `);
-        outputDoc.close();
+        zip.generateAsync({type:"blob"})
+        .then(function(content) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = 'project.zip';
+            link.click();
+        });
     });
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>
