@@ -16,38 +16,34 @@
             margin-bottom: 20px;
         }
         section {
-            display: flex;
-            justify-content: space-between;
             margin-bottom: 20px;
         }
         textarea {
-            width: 30%;
-            height: 300px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: none;
-        }
-        #output {
             width: 100%;
-            height: 300px;
+            height: 150px;
+            margin-bottom: 10px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            background-color: #fff;
-            padding: 10px;
-            overflow: auto;
+            font-family: monospace;
         }
         button {
-            margin-top: 10px;
             padding: 10px 15px;
-            background-color: #28a745;
+            background-color: #007BFF;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            min-height: 150px;
         }
     </style>
 </head>
@@ -57,43 +53,52 @@
     <h1>Online HTML Editor</h1>
 </header>
 
-<section>
-    <div>
-        <h2>HTML</h2>
-        <textarea id="htmlInput" placeholder="Write your HTML here..."></textarea>
-    </div>
-    <div>
-        <h2>CSS</h2>
-        <textarea id="cssInput" placeholder="Write your CSS here..."></textarea>
-    </div>
-    <div>
-        <h2>JavaScript</h2>
-        <textarea id="jsInput" placeholder="Write your JavaScript here..."></textarea>
-    </div>
-</section>
+<main>
+    <section>
+        <h2>HTML Code</h2>
+        <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea>
+    </section>
+    
+    <section>
+        <h2>CSS Code</h2>
+        <textarea id="cssInput" placeholder="Write your CSS code here..."></textarea>
+    </section>
+    
+    <section>
+        <h2>JavaScript Code</h2>
+        <textarea id="jsInput" placeholder="Write your JavaScript code here..."></textarea>
+    </section>
+    
+    <button id="runBtn">Run Code</button>
 
-<button id="runCode">Run Code</button>
-
-<h2>Output</h2>
-<div id="output"></div>
+    <section>
+        <h2>Output</h2>
+        <iframe id="output" sandbox="allow-same-origin allow-scripts"></iframe>
+    </section>
+</main>
 
 <script>
-    document.getElementById('runCode').addEventListener('click', function() {
+    document.getElementById('runBtn').addEventListener('click', function() {
         const html = document.getElementById('htmlInput').value;
-        const css = "<style>" + document.getElementById('cssInput').value + "</style>";
+        const css = document.getElementById('cssInput').value;
         const js = document.getElementById('jsInput').value;
-        
-        const outputFrame = document.createElement('iframe');
-        outputFrame.style.width = '100%';
-        outputFrame.style.height = '100%';
-        outputFrame.style.border = 'none';
-        document.getElementById('output').innerHTML = '';
-        document.getElementById('output').appendChild(outputFrame);
-        
-        const output = outputFrame.contentWindow.document;
-        output.open();
-        output.write(css + html + '<script>' + js + '<\/script>');
-        output.close();
+
+        const outputFrame = document.getElementById('output');
+        const outputDoc = outputFrame.contentDocument || outputFrame.contentWindow.document;
+
+        outputDoc.open();
+        outputDoc.write(`
+            <html>
+            <head>
+                <style>${css}</style>
+            </head>
+            <body>
+                ${html}
+                <script>${js}<\/script>
+            </body>
+            </html>
+        `);
+        outputDoc.close();
     });
 </script>
 
