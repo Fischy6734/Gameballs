@@ -20,22 +20,18 @@
         }
         textarea {
             width: 100%;
-            height: 200px;
+            height: 150px;
             margin-bottom: 10px;
-            padding: 10px;
-            font-family: monospace;
         }
         button {
             padding: 10px 15px;
-            margin-right: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
             cursor: pointer;
         }
-        #output {
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
-            height: 200px;
-            overflow-y: auto;
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -46,86 +42,124 @@
 </header>
 
 <section>
-    <h2>HTML Code</h2>
-    <textarea id="html-input" placeholder="Write your HTML code here..."></textarea>
+    <h2>HTML</h2>
+    <textarea id="htmlInput" placeholder="Write your HTML here..."></textarea>
 </section>
 
 <section>
-    <h2>CSS Code</h2>
-    <input type="text" id="css-filename" placeholder="CSS Filename (without .css)">
-    <textarea id="css-input" placeholder="Write your CSS code here..."></textarea>
+    <h2>CSS</h2>
+    <input type="text" id="cssFileName" placeholder="CSS file name (without .css)">
+    <textarea id="cssInput" placeholder="Write your CSS here..."></textarea>
 </section>
 
 <section>
-    <h2>JavaScript Code</h2>
-    <input type="text" id="js-filename" placeholder="JavaScript Filename (without .js)">
-    <textarea id="js-input" placeholder="Write your JavaScript code here..."></textarea>
+    <h2>JavaScript</h2>
+    <input type="text" id="jsFileName" placeholder="JS file name (without .js)">
+    <textarea id="jsInput" placeholder="Write your JavaScript here..."></textarea>
 </section>
 
 <section>
-    <button id="run-code">Run Code</button>
-    <button id="download">Download Files</button>
-    <button id="add-more">Add More Files</button>
+    <button id="downloadButton">Download Files</button>
+    <button id="addMoreButton">Add More HTML/CSS/JS</button>
 </section>
 
 <section>
     <h2>Output</h2>
-    <iframe id="output" sandbox="allow-scripts"></iframe>
+    <iframe id="outputFrame" style="width: 100%; height: 300px; border: 1px solid #ccc;"></iframe>
 </section>
 
 <script>
-    window.onbeforeunload = function() {
-        return "All your progress will be gone.";
+    const htmlInput = document.getElementById('htmlInput');
+    const cssInput = document.getElementById('cssInput');
+    const jsInput = document.getElementById('jsInput');
+    const cssFileName = document.getElementById('cssFileName');
+    const jsFileName = document.getElementById('jsFileName');
+    const outputFrame = document.getElementById('outputFrame');
+
+    // Load saved data from local storage
+    window.onload = function() {
+        if (localStorage.getItem('html')) {
+            htmlInput.value = localStorage.getItem('html');
+        }
+        if (localStorage.getItem('css')) {
+            cssInput.value = localStorage.getItem('css');
+            cssFileName.value = localStorage.getItem('cssFileName');
+        }
+        if (localStorage.getItem('js')) {
+            jsInput.value = localStorage.getItem('js');
+            jsFileName.value = localStorage.getItem('jsFileName');
+        }
+        updateOutput();
     };
 
-    document.getElementById('run-code').addEventListener('click', function() {
-        const html = document.getElementById('html-input').value;
-        const css = document.getElementById('css-input').value;
-        const js = document.getElementById('js-input').value;
-        const outputFrame = document.getElementById('output');
-
-        const outputDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
-        outputDocument.open();
-        outputDocument.write(html);
-        outputDocument.write(`<style>${css}</style>`);
-        outputDocument.write(`<script>${js}<\/script>`);
-        outputDocument.close();
+    // Save data to local storage on input change
+    [htmlInput, cssInput, jsInput, cssFileName, jsFileName].forEach(element => {
+        element.addEventListener('input', saveData);
     });
 
-    document.getElementById('download').addEventListener('click', function() {
-        const html = document.getElementById('html-input').value;
-        const css = document.getElementById('css-input').value;
-        const js = document.getElementById('js-input').value;
-        const cssFilename = document.getElementById('css-filename').value || 'style';
-        const jsFilename = document.getElementById('js-filename').value || 'script';
+    function saveData() {
+        localStorage.setItem('html', htmlInput.value);
+        localStorage.setItem('css', cssInput.value);
+        localStorage.setItem('js', jsInput.value);
+        localStorage.setItem('cssFileName', cssFileName.value);
+        localStorage.setItem('jsFileName', jsFileName.value);
+        updateOutput();
+    }
+
+    function updateOutput() {
+        const htmlContent = htmlInput.value;
+        const cssContent = cssInput.value;
+        const jsContent = jsInput.value;
+
+        const output = `
+            <html>
+                <head>
+                    <style>${cssContent}</style>
+                </head>
+                <body>
+                    ${htmlContent}
+                    <script>${jsContent}</script>
+                </body>
+            </html>
+        `;
+        const outputDoc = outputFrame.contentDocument || outputFrame.contentWindow.document;
+        outputDoc.open();
+        outputDoc.write(output);
+        outputDoc.close();
+    }
+
+    document.getElementById('downloadButton').addEventListener('click', function() {
+        const htmlContent = htmlInput.value;
+        const cssContent = cssInput.value;
+        const jsContent = jsInput.value;
 
         const zip = new JSZip();
-        zip.file('index.html', html);
+        zip.file("index.html", htmlContent);
 
-        if (css) {
-            zip.file(`${cssFilename}.css`, css);
+        if (cssFileName.value && cssContent) {
+            zip.file(`${cssFileName.value}.css`, cssContent);
         }
 
-        if (js) {
-            zip.file(`${jsFilename}.js`, js);
+        if (jsFileName.value && jsContent) {
+            zip.file(`${jsFileName.value}.js`, jsContent);
         }
 
-        zip.generateAsync({type: 'blob'}).then(function(content) {
+        zip.generateAsync({ type: "blob" }).then(function(content) {
             const a = document.createElement('a');
             a.href = URL.createObjectURL(content);
-            a.download = 'project.zip';
-            document.body.appendChild(a);
+            a.download = "project.zip";
             a.click();
-            document.body.removeChild(a);
         });
     });
 
-    document.getElementById('add-more').addEventListener('click', function() {
-        // Logic to add more HTML, CSS, or JS sections can be implemented here.
-        alert("Feature to add more files is not implemented yet.");
+    document.getElementById('addMoreButton').addEventListener('click', function() {
+        // Logic to add more HTML/CSS/JS sections can be added here
+        alert('Functionality to add more sections is not implemented yet.');
     });
 </script>
 
+<!-- Include JSZip library for downloading zip files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 </body>
 </html>
