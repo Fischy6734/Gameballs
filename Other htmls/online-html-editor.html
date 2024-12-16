@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Chat Box</title>
+    <title>Live Chat System</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main>
-        <section class="chat-container" aria-label="Chat Window">
-            <div class="messages" id="messages" aria-live="polite">
-                <!-- Messages will be dynamically inserted here -->
-            </div>
-            <form id="chat-form" aria-label="Send a message">
-                <input type="text" id="message-input" placeholder="Type a message..." required aria-required="true">
-                <button type="submit">Send</button>
-            </form>
+    <main role="main" aria-labelledby="chat-title">
+        <header>
+            <h1 id="chat-title">Live Chat</h1>
+        </header>
+        <section class="chat-container" aria-live="polite">
+            <ul class="chat-messages" id="chat-messages" tabindex="0">
+                <!-- Chat messages will be dynamically inserted here -->
+            </ul>
         </section>
+        <form class="chat-form" id="chat-form" aria-labelledby="chat-form-title" onsubmit="sendMessage(event)">
+            <label for="message-input" id="chat-form-title" class="visually-hidden">Type your message</label>
+            <input type="text" id="message-input" name="message" placeholder="Type a message..." required aria-required="true">
+            <button type="submit">Send</button>
+        </form>
     </main>
-
     <script src="script.js"></script>
 </body>
 </html>
