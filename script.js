@@ -1,31 +1,15 @@
-document.getElementById('chat-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
-
+function sendMessage(event) {
+    event.preventDefault();
     const input = document.getElementById('message-input');
     const messageText = input.value.trim();
 
     if (messageText) {
-        // Display the user message
-        displayMessage(messageText, 'user');
-
-        // Clear the input
+        const messageList = document.getElementById('chat-messages');
+        const newMessage = document.createElement('li');
+        newMessage.classList.add('sender');
+        newMessage.textContent = messageText;
+        messageList.appendChild(newMessage);
         input.value = '';
-
-        // Simulate a bot response (you can replace this with actual bot logic)
-        setTimeout(() => {
-            const botResponse = "You said: " + messageText; // Simple echo
-            displayMessage(botResponse, 'bot');
-        }, 1000);
+        messageList.scrollTop = messageList.scrollHeight; // Scroll to the bottom
     }
-});
-
-function displayMessage(text, sender) {
-    const messagesDiv = document.getElementById('messages');
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', sender);
-    messageDiv.textContent = text;
-    messagesDiv.appendChild(messageDiv);
-
-    // Scroll to the bottom of the messages
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
