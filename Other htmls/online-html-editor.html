@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-
-<link rel="stylesheet" href="style.css">
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,34 +7,47 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
+            margin: 0;
+            padding: 20px;
             background-color: #f4f4f4;
         }
         header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        section {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
         textarea {
+            width: 30%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        #output {
             width: 100%;
-            height: 200px;
-            margin-bottom: 10px;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            padding: 10px;
+            overflow: auto;
         }
         button {
+            margin-top: 10px;
             padding: 10px 15px;
-            background-color: #007BFF;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3;
-        }
-        section {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: white;
-            border: 1px solid #ccc;
+            background-color: #218838;
         }
     </style>
 </head>
@@ -45,25 +55,45 @@
 
 <header>
     <h1>Online HTML Editor</h1>
-    <p>Type your HTML code below and click "Save" to see the output.</p>
 </header>
 
-<main>
-    <label for="htmlInput">HTML Code:</label>
-    <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea>
-    <button id="saveButton">Save</button>
+<section>
+    <div>
+        <h2>HTML</h2>
+        <textarea id="htmlInput" placeholder="Write your HTML here..."></textarea>
+    </div>
+    <div>
+        <h2>CSS</h2>
+        <textarea id="cssInput" placeholder="Write your CSS here..."></textarea>
+    </div>
+    <div>
+        <h2>JavaScript</h2>
+        <textarea id="jsInput" placeholder="Write your JavaScript here..."></textarea>
+    </div>
+</section>
 
-    <section id="outputSection">
-        <h2>Output:</h2>
-        <div id="output" aria-live="polite"></div>
-    </section>
-</main>
+<button id="runCode">Run Code</button>
+
+<h2>Output</h2>
+<div id="output"></div>
 
 <script>
-    document.getElementById('saveButton').addEventListener('click', function() {
-        const htmlCode = document.getElementById('htmlInput').value;
-        const outputDiv = document.getElementById('output');
-        outputDiv.innerHTML = htmlCode;
+    document.getElementById('runCode').addEventListener('click', function() {
+        const html = document.getElementById('htmlInput').value;
+        const css = "<style>" + document.getElementById('cssInput').value + "</style>";
+        const js = document.getElementById('jsInput').value;
+        
+        const outputFrame = document.createElement('iframe');
+        outputFrame.style.width = '100%';
+        outputFrame.style.height = '100%';
+        outputFrame.style.border = 'none';
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').appendChild(outputFrame);
+        
+        const output = outputFrame.contentWindow.document;
+        output.open();
+        output.write(css + html + '<script>' + js + '<\/script>');
+        output.close();
     });
 </script>
 
