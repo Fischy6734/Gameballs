@@ -4,110 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online HTML Editor</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-family: monospace;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            height: 200px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Online HTML Editor</h1>
-    </header>
-    <main>
-        <section id="editor">
-            <h2>Editor</h2>
-            <label for="html-input">HTML:</label>
-            <textarea id="html-input" placeholder="Write your HTML here..."></textarea>
 
-            <label for="css-input">CSS:</label>
-            <textarea id="css-input" placeholder="Write your CSS here..."></textarea>
+<header>
+    <h1>Online HTML Editor</h1>
+</header>
 
-            <label for="js-input">JavaScript:</label>
-            <textarea id="js-input" placeholder="Write your JavaScript here..."></textarea>
+<section>
+    <h2>HTML Code</h2>
+    <textarea id="html-input" placeholder="Write your HTML code here..."></textarea>
+</section>
 
-            <button id="add-html">Add More HTML</button>
-            <button id="download">Download</button>
-        </section>
+<section>
+    <h2>CSS Code</h2>
+    <input type="text" id="css-filename" placeholder="CSS Filename (without .css)">
+    <textarea id="css-input" placeholder="Write your CSS code here..."></textarea>
+</section>
 
-        <section id="output">
-            <h2>Output</h2>
-            <iframe id="output-frame" title="Output Preview"></iframe>
-        </section>
-    </main>
+<section>
+    <h2>JavaScript Code</h2>
+    <input type="text" id="js-filename" placeholder="JavaScript Filename (without .js)">
+    <textarea id="js-input" placeholder="Write your JavaScript code here..."></textarea>
+</section>
 
-    <script>
-        const htmlInput = document.getElementById('html-input');
-        const cssInput = document.getElementById('css-input');
-        const jsInput = document.getElementById('js-input');
-        const outputFrame = document.getElementById('output-frame');
-        const downloadButton = document.getElementById('download');
+<section>
+    <button id="run-code">Run Code</button>
+    <button id="download">Download Files</button>
+    <button id="add-more">Add More Files</button>
+</section>
 
-        // Function to update output
-        function updateOutput() {
-            const html = htmlInput.value;
-            const css = cssInput.value;
-            const js = jsInput.value;
+<section>
+    <h2>Output</h2>
+    <iframe id="output" sandbox="allow-scripts"></iframe>
+</section>
 
-            const outputDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
-            outputDocument.open();
-            outputDocument.write(`
-                <html>
-                <head>
-                    <style>${css}</style>
-                </head>
-                <body>
-                    ${html}
-                    <script>${js}</script>
-                </body>
-                </html>
-            `);
-            outputDocument.close();
+<script>
+    window.onbeforeunload = function() {
+        return "All your progress will be gone.";
+    };
+
+    document.getElementById('run-code').addEventListener('click', function() {
+        const html = document.getElementById('html-input').value;
+        const css = document.getElementById('css-input').value;
+        const js = document.getElementById('js-input').value;
+        const outputFrame = document.getElementById('output');
+
+        const outputDocument = outputFrame.contentDocument || outputFrame.contentWindow.document;
+        outputDocument.open();
+        outputDocument.write(html);
+        outputDocument.write(`<style>${css}</style>`);
+        outputDocument.write(`<script>${js}<\/script>`);
+        outputDocument.close();
+    });
+
+    document.getElementById('download').addEventListener('click', function() {
+        const html = document.getElementById('html-input').value;
+        const css = document.getElementById('css-input').value;
+        const js = document.getElementById('js-input').value;
+        const cssFilename = document.getElementById('css-filename').value || 'style';
+        const jsFilename = document.getElementById('js-filename').value || 'script';
+
+        const zip = new JSZip();
+        zip.file('index.html', html);
+
+        if (css) {
+            zip.file(`${cssFilename}.css`, css);
         }
 
-        // Event listeners
-        htmlInput.addEventListener('input', updateOutput);
-        cssInput.addEventListener('input', updateOutput);
-        jsInput.addEventListener('input', updateOutput);
+        if (js) {
+            zip.file(`${jsFilename}.js`, js);
+        }
 
-        // Download functionality
-        downloadButton.addEventListener('click', function() {
-            const htmlContent = htmlInput.value;
-            const cssContent = cssInput.value;
-            const jsContent = jsInput.value;
-
-            const zip = new JSZip();
-            zip.file('index.html', htmlContent);
-
-            if (cssContent) {
-                const cssFileName = prompt("Enter the name for your CSS file (without extension):", "styles") || "styles";
-                zip.file(`${cssFileName}.css`, cssContent);
-            }
-
-            if (jsContent) {
-                const jsFileName = prompt("Enter the name for your JavaScript file (without extension):", "script") || "script";
-                zip.file(`${jsFileName}.js`, jsContent);
-            }
-
-            zip.generateAsync({ type: "blob" })
-                .then(function(content) {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(content);
-                    link.download = 'project.zip';
-                    link.click();
-                });
+        zip.generateAsync({type: 'blob'}).then(function(content) {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(content);
+            a.download = 'project.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         });
+    });
 
-        // Warn user on window close if there are unsaved changes
-        window.onbeforeunload = function() {
-            if (htmlInput.value || cssInput.value || jsInput.value) {
-                return "All your progress will be gone. Are you sure you want to leave?";
-            }
-        };
+    document.getElementById('add-more').addEventListener('click', function() {
+        // Logic to add more HTML, CSS, or JS sections can be implemented here.
+        alert("Feature to add more files is not implemented yet.");
+    });
+</script>
 
-        // Add more HTML button functionality
-        document.getElementById('add-html').addEventListener('click', function() {
-            const newHtml = prompt("Enter additional HTML:", "") || "";
-            htmlInput.value += newHtml;
-            updateOutput();
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>
