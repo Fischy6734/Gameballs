@@ -16,32 +16,28 @@
             margin-bottom: 20px;
         }
         section {
-            display: flex;
-            justify-content: space-between;
+            margin-bottom: 20px;
         }
         textarea {
-            width: 30%;
-            height: 300px;
-            margin-right: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none;
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
         }
         #output {
-            width: 30%;
-            height: 300px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: white;
-            overflow: auto;
+            padding: 10px;
+            background-color: #fff;
+            min-height: 150px;
         }
         button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
             cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -52,69 +48,91 @@
 </header>
 
 <section>
+    <h2>HTML</h2>
     <textarea id="htmlInput" placeholder="Write your HTML here..."></textarea>
+</section>
+
+<section>
+    <h2>CSS</h2>
     <textarea id="cssInput" placeholder="Write your CSS here..."></textarea>
+</section>
+
+<section>
+    <h2>JavaScript</h2>
     <textarea id="jsInput" placeholder="Write your JavaScript here..."></textarea>
-    <iframe id="output" title="Output" sandbox="allow-scripts"></iframe>
+</section>
+
+<section>
+    <h2>Output</h2>
+    <div id="output"></div>
 </section>
 
 <button id="downloadBtn">Download Project</button>
 
 <script>
-    const htmlInput = document.getElementById('htmlInput');
-    const cssInput = document.getElementById('cssInput');
-    const jsInput = document.getElementById('jsInput');
-    const outputFrame = document.getElementById('output');
-
-    htmlInput.addEventListener('input', updateOutput);
-    cssInput.addEventListener('input', updateOutput);
-    jsInput.addEventListener('input', updateOutput);
-
+    // Function to update the output display
     function updateOutput() {
-        const html = htmlInput.value;
-        const css = cssInput.value;
-        const js = jsInput.value;
+        const htmlContent = document.getElementById('htmlInput').value;
+        const cssContent = document.getElementById('cssInput').value;
+        const jsContent = document.getElementById('jsInput').value;
 
-        const output = outputFrame.contentDocument || outputFrame.contentWindow.document;
-        output.open();
-        output.write(`
-            <html>
-            <head>
-                <style>${css}</style>
-            </head>
-            <body>${html}
-                <script>${js}</script>
-            </body>
-            </html>
-        `);
-        output.close();
+        const outputFrame = document.getElementById('output');
+        outputFrame.innerHTML = htmlContent;
+
+        // Create a style element for CSS
+        if (cssContent) {
+            const style = document.createElement('style');
+            style.textContent = cssContent;
+            outputFrame.appendChild(style);
+        }
+
+        // Create a script element for JS
+        if (jsContent) {
+            const script = document.createElement('script');
+            script.textContent = jsContent;
+            outputFrame.appendChild(script);
+        }
     }
 
+    document.getElementById('htmlInput').addEventListener('input', updateOutput);
+    document.getElementById('cssInput').addEventListener('input', updateOutput);
+    document.getElementById('jsInput').addEventListener('input', updateOutput);
+
+    // Function to download the project
     document.getElementById('downloadBtn').addEventListener('click', function() {
-        const html = htmlInput.value;
-        const css = cssInput.value;
-        const js = jsInput.value;
+        const htmlContent = document.getElementById('htmlInput').value;
+        const cssContent = document.getElementById('cssInput').value;
+        const jsContent = document.getElementById('jsInput').value;
 
         const zip = new JSZip();
+        zip.file("index.html", htmlContent);
 
-        zip.file("index.html", html);
-        if (css) zip.file("style.css", css);
-        if (js) zip.file("script.js", js);
+        if (cssContent) {
+            zip.file("styles.css", cssContent);
+        }
 
-        zip.generateAsync({type:"blob"})
-        .then(function(content) {
+        if (jsContent) {
+            zip.file("script.js", jsContent);
+        }
+
+        zip.generateAsync({ type: "blob" }).then(function(content) {
             const a = document.createElement('a');
             a.href = URL.createObjectURL(content);
-            a.download = 'project.zip';
+            a.download = "project.zip";
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
         });
     });
 
+    // Warn the user on page unload
     window.onbeforeunload = function() {
-        return "All your progress will be gone. Are you sure you want to leave?";
+        return "All your progress will be gone.";
     };
 </script>
 
+<!-- Include JSZip library for zipping files -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 </body>
 </html>
