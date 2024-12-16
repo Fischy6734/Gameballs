@@ -4,118 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online HTML Editor</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 150px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Online HTML Editor</h1>
-    </header>
-    <main>
-        <section id="editor-section">
-            <h2>HTML Editor</h2>
-            <textarea id="html-input" placeholder="Write your HTML here..."></textarea>
-            
-            <h2>CSS Editor</h2>
-            <textarea id="css-input" placeholder="Write your CSS here..."></textarea>
-            <label for="css-filename">Rename CSS file:</label>
-            <input type="text" id="css-filename" placeholder="style.css">
 
-            <h2>JavaScript Editor</h2>
-            <textarea id="js-input" placeholder="Write your JavaScript here..."></textarea>
-            <label for="js-filename">Rename JS file:</label>
-            <input type="text" id="js-filename" placeholder="script.js">
+    <h1>Online HTML Editor</h1>
 
-            <button id="add-more">Add More HTML/CSS/JS</button>
-            <button id="download">Download</button>
-        </section>
-        
-        <section id="output-section">
-            <h2>Output</h2>
-            <iframe id="output" title="Output Preview"></iframe>
-        </section>
-    </main>
+    <section>
+        <h2>HTML</h2>
+        <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea>
+    </section>
+
+    <section>
+        <h2>CSS</h2>
+        <textarea id="cssInput" placeholder="Write your CSS code here..."></textarea>
+    </section>
+
+    <section>
+        <h2>JavaScript</h2>
+        <textarea id="jsInput" placeholder="Write your JavaScript code here..."></textarea>
+    </section>
+
+    <button id="previewBtn">Preview</button>
+    <button id="downloadBtn">Download</button>
+    <button id="addMoreBtn">Add More HTML/CSS</button>
+
+    <h2>Output</h2>
+    <div id="output"></div>
 
     <script>
-        // Save user progress to local storage
-        function saveProgress() {
-            localStorage.setItem('htmlInput', document.getElementById('html-input').value);
-            localStorage.setItem('cssInput', document.getElementById('css-input').value);
-            localStorage.setItem('jsInput', document.getElementById('js-input').value);
-            localStorage.setItem('cssFilename', document.getElementById('css-filename').value);
-            localStorage.setItem('jsFilename', document.getElementById('js-filename').value);
-        }
+        const htmlInput = document.getElementById('htmlInput');
+        const cssInput = document.getElementById('cssInput');
+        const jsInput = document.getElementById('jsInput');
+        const output = document.getElementById('output');
 
-        // Load user progress from local storage
-        function loadProgress() {
-            document.getElementById('html-input').value = localStorage.getItem('htmlInput') || '';
-            document.getElementById('css-input').value = localStorage.getItem('cssInput') || '';
-            document.getElementById('js-input').value = localStorage.getItem('jsInput') || '';
-            document.getElementById('css-filename').value = localStorage.getItem('cssFilename') || 'style.css';
-            document.getElementById('js-filename').value = localStorage.getItem('jsFilename') || 'script.js';
+        // Load saved inputs from localStorage
+        window.onload = function() {
+            htmlInput.value = localStorage.getItem('html') || '';
+            cssInput.value = localStorage.getItem('css') || '';
+            jsInput.value = localStorage.getItem('js') || '';
             updateOutput();
-        }
+        };
 
-        // Update output preview
-        function updateOutput() {
-            const htmlContent = document.getElementById('html-input').value;
-            const cssContent = document.getElementById('css-input').value;
-            const jsContent = document.getElementById('js-input').value;
-
-            const outputFrame = document.getElementById('output').contentWindow.document;
-            outputFrame.open();
-            outputFrame.write(`
-                <html>
-                <head>
-                    <style>${cssContent}</style>
-                </head>
-                <body>
-                    ${htmlContent}
-                    <script>${jsContent}</script>
-                </body>
-                </html>
-            `);
-            outputFrame.close();
-        }
-
-        // Download files
-        function downloadFiles() {
-            const htmlContent = document.getElementById('html-input').value;
-            const cssContent = document.getElementById('css-input').value;
-            const jsContent = document.getElementById('js-input').value;
-
-            const cssFilename = document.getElementById('css-filename').value || 'style.css';
-            const jsFilename = document.getElementById('js-filename').value || 'script.js';
-
-            const zip = new JSZip();
-            zip.file('index.html', htmlContent);
-
-            if (cssContent) {
-                zip.file(cssFilename, cssContent);
-            }
-            if (jsContent) {
-                zip.file(jsFilename, jsContent);
-            }
-
-            zip.generateAsync({ type: 'blob' }).then(function(content) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = 'project.zip';
-                link.click();
+        // Save inputs to localStorage
+        [htmlInput, cssInput, jsInput].forEach(input => {
+            input.addEventListener('input', () => {
+                localStorage.setItem(input.id, input.value);
+                updateOutput();
             });
-        }
-
-        document.getElementById('html-input').addEventListener('input', updateOutput);
-        document.getElementById('css-input').addEventListener('input', updateOutput);
-        document.getElementById('js-input').addEventListener('input', updateOutput);
-        document.getElementById('download').addEventListener('click', downloadFiles);
-        document.getElementById('add-more').addEventListener('click', function() {
-            // Logic to add more HTML/CSS/JS sections can be implemented here
-            alert("Functionality to add more sections is not yet implemented.");
         });
 
-        window.addEventListener('beforeunload', saveProgress);
-        window.addEventListener('load', loadProgress);
+        // Function to update the output
+        function updateOutput() {
+            const htmlContent = htmlInput.value;
+            const cssContent = cssInput.value;
+            const jsContent = jsInput.value;
+
+            const outputFrame = `
+                <style>${cssContent}</style>
+                ${htmlContent}
+                <script>${jsContent}<\/script>
+            `;
+            output.innerHTML = outputFrame;
+        }
+
+        // Preview button functionality
+        document.getElementById('previewBtn').addEventListener('click', updateOutput);
+
+        // Download button functionality
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const htmlBlob = new Blob([htmlInput.value], { type: 'text/html' });
+            const cssBlob = cssInput.value ? new Blob([cssInput.value], { type: 'text/css' }) : null;
+            const jsBlob = jsInput.value ? new Blob([jsInput.value], { type: 'application/javascript' }) : null;
+
+            const zip = new JSZip();
+            zip.file('index.html', htmlBlob);
+            if (cssBlob) zip.file('style.css', cssBlob);
+            if (jsBlob) zip.file('script.js', jsBlob);
+
+            zip.generateAsync({ type: 'blob' }).then(function(content) {
+                const url = URL.createObjectURL(content);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'project.zip';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        });
+
+        // Add more HTML/CSS functionality (placeholder)
+        document.getElementById('addMoreBtn').addEventListener('click', () => {
+            alert('Functionality to add more HTML/CSS is not implemented yet.');
+        });
     </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>
