@@ -3,133 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online HTML Editor</title>
+    <title>Online Chat Box</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
         }
-        header {
-            margin-bottom: 20px;
+        .chat-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            max-width: 400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
         }
-        section {
-            margin-bottom: 20px;
+        .chat-area {
+            flex: 1;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            overflow-y: auto;
+            height: 300px;
         }
-        textarea {
-            width: 100%;
-            height: 150px;
-            margin-bottom: 10px;
+        .chat-input {
+            display: flex;
+            padding: 10px;
         }
-        button {
-            padding: 10px 15px;
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             margin-right: 10px;
+        }
+        .chat-input button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
             cursor: pointer;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Online HTML Editor</h1>
-</header>
-
-<section>
-    <h2>HTML</h2>
-    <textarea id="htmlInput" placeholder="Write your HTML code here..."></textarea>
-</section>
-
-<section>
-    <h2>CSS</h2>
-    <input type="text" id="cssFileName" placeholder="CSS File Name (without extension)">
-    <textarea id="cssInput" placeholder="Write your CSS code here..."></textarea>
-</section>
-
-<section>
-    <h2>JavaScript</h2>
-    <input type="text" id="jsFileName" placeholder="JavaScript File Name (without extension)">
-    <textarea id="jsInput" placeholder="Write your JavaScript code here..."></textarea>
-</section>
-
-<button id="downloadBtn">Download Files</button>
-<button id="addMoreBtn">Add More HTML/CSS</button>
-
-<section>
-    <h2>Output</h2>
-    <iframe id="outputFrame" style="width: 100%; height: 300px; border: 1px solid #ccc;"></iframe>
-</section>
+<div role="dialog" aria-labelledby="chatTitle" class="chat-container">
+    <h2 id="chatTitle" class="visually-hidden">Online Chat</h2>
+    <div class="chat-area" aria-live="polite" aria-relevant="additions">
+        <!-- Messages will be dynamically added here -->
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userMessage" aria-label="Type your message" placeholder="Type your message..." required>
+        <button id="sendButton" aria-label="Send message">Send</button>
+    </div>
+</div>
 
 <script>
-    // Save progress to local storage
-    function saveProgress() {
-        localStorage.setItem('htmlContent', document.getElementById('htmlInput').value);
-        localStorage.setItem('cssContent', document.getElementById('cssInput').value);
-        localStorage.setItem('jsContent', document.getElementById('jsInput').value);
-        localStorage.setItem('cssFileName', document.getElementById('cssFileName').value);
-        localStorage.setItem('jsFileName', document.getElementById('jsFileName').value);
-    }
+    const sendButton = document.getElementById('sendButton');
+    const userMessage = document.getElementById('userMessage');
+    const chatArea = document.querySelector('.chat-area');
 
-    // Load progress from local storage
-    function loadProgress() {
-        document.getElementById('htmlInput').value = localStorage.getItem('htmlContent') || '';
-        document.getElementById('cssInput').value = localStorage.getItem('cssContent') || '';
-        document.getElementById('jsInput').value = localStorage.getItem('jsContent') || '';
-        document.getElementById('cssFileName').value = localStorage.getItem('cssFileName') || '';
-        document.getElementById('jsFileName').value = localStorage.getItem('jsFileName') || '';
-    }
-
-    // Update output frame
-    function updateOutput() {
-        const html = document.getElementById('htmlInput').value;
-        const css = `<style>${document.getElementById('cssInput').value}</style>`;
-        const js = document.getElementById('jsInput').value;
-        const outputFrame = document.getElementById('outputFrame').contentWindow.document;
-        outputFrame.open();
-        outputFrame.write(html + css + `<script>${js}<\/script>`);
-        outputFrame.close();
-    }
-
-    // Download files
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-        saveProgress();
-        const htmlContent = document.getElementById('htmlInput').value;
-        const cssContent = document.getElementById('cssInput').value;
-        const jsContent = document.getElementById('jsInput').value;
-        const cssFileName = document.getElementById('cssFileName').value || 'style';
-        const jsFileName = document.getElementById('jsFileName').value || 'script';
-        
-        const zip = new JSZip();
-        zip.file('index.html', htmlContent);
-        if (cssContent) zip.file(`${cssFileName}.css`, cssContent);
-        if (jsContent) zip.file(`${jsFileName}.js`, jsContent);
-        
-        zip.generateAsync({ type: "blob" }).then(function(content) {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(content);
-            a.download = 'project.zip';
-            a.click();
-        });
+    sendButton.addEventListener('click', () => {
+        const messageText = userMessage.value.trim();
+        if (messageText) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = messageText;
+            chatArea.appendChild(messageElement);
+            userMessage.value = ''; // Clear the input field
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
+        }
     });
 
-    // Add more HTML/CSS functionality (placeholder)
-    document.getElementById('addMoreBtn').addEventListener('click', () => {
-        // Placeholder for adding more HTML/CSS sections
-        alert('Add more functionality here.');
+    // Allow sending message with Enter key
+    userMessage.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendButton.click();
+        }
     });
-
-    // Event listeners for input changes
-    document.querySelectorAll('textarea').forEach(textarea => {
-        textarea.addEventListener('input', updateOutput);
-    });
-
-    // Load progress on page load
-    window.onload = loadProgress;
-    window.onbeforeunload = saveProgress;
 </script>
-
-<!-- Include JSZip for downloading files -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 </body>
 </html>
