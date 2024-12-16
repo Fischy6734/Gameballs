@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Chat System</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <main role="main" aria-labelledby="chat-title">
-        <header>
-            <h1 id="chat-title">Live Chat</h1>
-        </header>
-        <section class="chat-container" aria-live="polite">
-            <ul class="chat-messages" id="chat-messages" tabindex="0">
-                <!-- Chat messages will be dynamically inserted here -->
-            </ul>
-        </section>
-        <form class="chat-form" id="chat-form" aria-labelledby="chat-form-title" onsubmit="sendMessage(event)">
-            <label for="message-input" id="chat-form-title" class="visually-hidden">Type your message</label>
-            <input type="text" id="message-input" name="message" placeholder="Type a message..." required aria-required="true">
-            <button type="submit">Send</button>
-        </form>
-    </main>
-    <script src="script.js"></script>
-</body>
-</html>
+<title>Real-Time Chat Application</title>
+
+
+
+<header>
+  <h1>Real-Time Chat Application</h1>
+</header>
+<div class="container">
+  <div class="chat-window">
+    <div class="chat-area">
+      <div class="chat-messages">
+
+      </div>
+    </div>
+    <div class="user-input">
+
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+</div>
