@@ -1,35 +1,89 @@
-<html>
-  <body>
-    <script src="https://accounts.google.com/gsi/client" async></script>
-    <div id="g_id_onload"
-        data-client_id="YOUR_GOOGLE_CLIENT_ID"
-        data-login_uri="https://your.domain/your_login_endpoint"
-        data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="sign_in_with"
-        data-shape="rectangular"
-        data-logo_alignment="left">
-    </div>
-  <body>
-</html><html>
-  <body>
-    <script src="https://accounts.google.com/gsi/client" async></script>
-    <div id="g_id_onload"
-        data-client_id="YOUR_GOOGLE_CLIENT_ID"
-        data-login_uri="https://your.domain/your_login_endpoint"
-        data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="sign_in_with"
-        data-shape="rectangular"
-        data-logo_alignment="left">
-    </div>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>HTML Editor</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Editor</h2>
+            <label for="html-code">HTML:</label>
+            <textarea id="html-code" rows="10" placeholder="Write your HTML here..."></textarea>
+
+            <label for="css-code">CSS:</label>
+            <textarea id="css-code" rows="10" placeholder="Write your CSS here..."></textarea>
+
+            <label for="js-code">JavaScript:</label>
+            <textarea id="js-code" rows="10" placeholder="Write your JavaScript here..."></textarea>
+        </section>
+
+        <section>
+            <h2>Settings</h2>
+            <label for="folder-name">Folder Name:</label>
+            <input type="text" id="folder-name" placeholder="Enter folder name" />
+
+            <label for="css-file-name">CSS File Name:</label>
+            <input type="text" id="css-file-name" placeholder="Enter CSS file name" />
+
+            <label for="js-file-name">JavaScript File Name:</label>
+            <input type="text" id="js-file-name" placeholder="Enter JS file name" />
+
+            <button id="download-btn">Download as ZIP</button>
+        </section>
+
+        <section>
+            <h2>Output</h2>
+            <iframe id="output" style="width: 100%; height: 300px;"></iframe>
+        </section>
+    </main>
+
+    <script>
+        const htmlCode = document.getElementById('html-code');
+        const cssCode = document.getElementById('css-code');
+        const jsCode = document.getElementById('js-code');
+        const output = document.getElementById('output');
+
+        // Update output on input change
+        function updateOutput() {
+            const doc = output.contentDocument || output.contentWindow.document;
+            doc.open();
+            doc.write(htmlCode.value + `<style>${cssCode.value}</style>`);
+            doc.write(`<script>${jsCode.value}<\/script>`);
+            doc.close();
+        }
+
+        htmlCode.addEventListener('input', updateOutput);
+        cssCode.addEventListener('input', updateOutput);
+        jsCode.addEventListener('input', updateOutput);
+
+        document.getElementById('download-btn').addEventListener('click', () => {
+            const folderName = document.getElementById('folder-name').value || 'project';
+            const cssFileName = document.getElementById('css-file-name').value || 'style.css';
+            const jsFileName = document.getElementById('js-file-name').value || 'script.js';
+
+            const zip = new JSZip();
+            zip.file('index.html', htmlCode.value);
+            if (cssCode.value.trim()) {
+                zip.file(cssFileName, cssCode.value);
+            }
+            if (jsCode.value.trim()) {
+                zip.file(jsFileName, jsCode.value);
+            }
+
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(content);
+                a.download = `${folderName}.zip`;
+                a.click();
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</body>
 </html>
