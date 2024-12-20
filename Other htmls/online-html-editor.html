@@ -3,87 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Editor</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Online Drawing App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        header {
+            text-align: center;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 0 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        .output {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #fff;
+            width: 100%;
+            max-width: 600px;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>HTML Editor</h1>
+        <h1>Online Drawing App</h1>
+        <p>Create your drawing and convert it to HTML!</p>
     </header>
     <main>
-        <section>
-            <h2>Editor</h2>
-            <label for="html-code">HTML:</label>
-            <textarea id="html-code" rows="10" placeholder="Write your HTML here..."></textarea>
-
-            <label for="css-code">CSS:</label>
-            <textarea id="css-code" rows="10" placeholder="Write your CSS here..."></textarea>
-
-            <label for="js-code">JavaScript:</label>
-            <textarea id="js-code" rows="10" placeholder="Write your JavaScript here..."></textarea>
-        </section>
-
-        <section>
-            <h2>Settings</h2>
-            <label for="folder-name">Folder Name:</label>
-            <input type="text" id="folder-name" placeholder="Enter folder name" />
-
-            <label for="css-file-name">CSS File Name:</label>
-            <input type="text" id="css-file-name" placeholder="Enter CSS file name" />
-
-            <label for="js-file-name">JavaScript File Name:</label>
-            <input type="text" id="js-file-name" placeholder="Enter JS file name" />
-
-            <button id="download-btn">Download as ZIP</button>
-        </section>
-
-        <section>
-            <h2>Output</h2>
-            <iframe id="output" style="width: 100%; height: 300px;"></iframe>
+        <canvas id="drawingCanvas" width="600" height="400"></canvas>
+        <div class="controls">
+            <button id="clearButton">Clear</button>
+            <button id="generateHtmlButton">Generate HTML</button>
+        </div>
+        <section class="output" id="htmlOutput" aria-live="polite">
+            <h2>Generated HTML Code</h2>
+            <pre id="htmlCode"></pre>
         </section>
     </main>
-
     <script>
-        const htmlCode = document.getElementById('html-code');
-        const cssCode = document.getElementById('css-code');
-        const jsCode = document.getElementById('js-code');
-        const output = document.getElementById('output');
+        // JavaScript to handle drawing and HTML generation
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
 
-        // Update output on input change
-        function updateOutput() {
-            const doc = output.contentDocument || output.contentWindow.document;
-            doc.open();
-            doc.write(htmlCode.value + `<style>${cssCode.value}</style>`);
-            doc.write(`<script>${jsCode.value}<\/script>`);
-            doc.close();
-        }
+        canvas.addEventListener('mousedown', () => {
+            drawing = true;
+            ctx.beginPath();
+        });
 
-        htmlCode.addEventListener('input', updateOutput);
-        cssCode.addEventListener('input', updateOutput);
-        jsCode.addEventListener('input', updateOutput);
-
-        document.getElementById('download-btn').addEventListener('click', () => {
-            const folderName = document.getElementById('folder-name').value || 'project';
-            const cssFileName = document.getElementById('css-file-name').value || 'style.css';
-            const jsFileName = document.getElementById('js-file-name').value || 'script.js';
-
-            const zip = new JSZip();
-            zip.file('index.html', htmlCode.value);
-            if (cssCode.value.trim()) {
-                zip.file(cssFileName, cssCode.value);
+        canvas.addEventListener('mousemove', (event) => {
+            if (drawing) {
+                ctx.lineTo(event.offsetX, event.offsetY);
+                ctx.stroke();
             }
-            if (jsCode.value.trim()) {
-                zip.file(jsFileName, jsCode.value);
-            }
+        });
 
-            zip.generateAsync({ type: 'blob' }).then((content) => {
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(content);
-                a.download = `${folderName}.zip`;
-                a.click();
-            });
+        canvas.addEventListener('mouseup', () => {
+            drawing = false;
+            ctx.closePath();
+        });
+
+        document.getElementById('clearButton').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('htmlCode').textContent = '';
+        });
+
+        document.getElementById('generateHtmlButton').addEventListener('click', () => {
+            const dataUrl = canvas.toDataURL();
+            const htmlCode = `<img src="${dataUrl}" alt="User's drawing">`;
+            document.getElementById('htmlCode').textContent = htmlCode;
         });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
 </html>
