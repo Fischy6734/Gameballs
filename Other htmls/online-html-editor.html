@@ -3,46 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blooket Code Finder</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <title>AI Water Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7fa;
+        }
+        canvas {
+            border: 1px solid #00796b;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Blooket Code Finder</h1>
-        <p>Search for active Blooket codes from all over the internet!</p>
+        <h1>AI Water Simulator</h1>
+        <p>Click the button to simulate water movement.</p>
     </header>
-
     <main>
-        <section aria-labelledby="search-section">
-            <h2 id="search-section">Find Blooket Codes</h2>
-            <form id="code-search-form" action="#" method="GET" aria-label="Blooket Code Search Form">
-                <label for="search-input">Enter your search criteria:</label>
-                <input type="text" id="search-input" name="search" placeholder="Search for codes..." required>
-                <button type="submit">Search</button>
-            </form>
-        </section>
-
-        <section aria-labelledby="results-section">
-            <h2 id="results-section">Results</h2>
-            <ul id="results-list" role="list">
-                <!-- Results will be dynamically inserted here -->
-            </ul>
-        </section>
-
-        <section aria-labelledby="router-codes-section">
-            <h2 id="router-codes-section">Router Code Finder</h2>
-            <p>Use our AI to find codes that are on your router.</p>
-            <button id="find-router-codes">Find Router Codes</button>
-            <ul id="router-results-list" role="list">
-                <!-- Router results will be dynamically inserted here -->
-            </ul>
-        </section>
+        <canvas id="waterCanvas" width="600" height="400"></canvas>
+        <button id="simulateButton">Simulate Water</button>
     </main>
-
     <footer>
-        <p>&copy; 2023 Blooket Code Finder. All rights reserved.</p>
+        <p>&copy; 2023 Water Simulation Project</p>
     </footer>
 
-    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+    <script>
+        const canvas = document.getElementById('waterCanvas');
+        const ctx = canvas.getContext('2d');
+        let waveHeight = 20;
+        let waveSpeed = 0.05;
+        let waveOffset = 0;
+
+        function drawWater() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00796b';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            for (let x = 0; x < canvas.width; x++) {
+                const y = canvas.height - waveHeight * Math.sin(x * waveSpeed + waveOffset) - 50;
+                ctx.lineTo(x, y);
+            }
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+            waveOffset += 0.1;
+            requestAnimationFrame(drawWater);
+        }
+
+        document.getElementById('simulateButton').addEventListener('click', () => {
+            drawWater();
+        });
+    </script>
 </body>
 </html>
