@@ -1,71 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blooket Game</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <script defer src="script.js"></script> <!-- Link to your JS file -->
+    <title>Blooket Code Finder</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS for styling -->
 </head>
+
 <body>
     <header>
-        <h1>Blooket Game</h1>
+        <h1>Blooket Code Finder</h1>
+        <p>Find your Blooket game codes easily!</p>
     </header>
-    
+
     <main>
-        <section id="game-container">
-            <h2>Question:</h2>
-            <p id="question">What is the capital of France?</p>
-            
-            <form id="answer-form">
-                <label for="answer">Your Answer:</label>
-                <input type="text" id="answer" name="answer" required>
-                <button type="submit">Submit</button>
+        <section aria-labelledby="code-finder">
+            <h2 id="code-finder">Find a Code</h2>
+            <form id="code-finder-form" action="#" method="POST">
+                <label for="game-type">Select Game Type:</label>
+                <select id="game-type" name="game-type" required>
+                    <option value="" disabled selected>Select a game type</option>
+                    <option value="classic">Classic</option>
+                    <option value="team">Team</option>
+                    <option value="battle">Battle</option>
+                    <option value="factory">Factory</option>
+                    <option value="gold">Gold Quest</option>
+                </select>
+
+                <label for="player-count">Number of Players:</label>
+                <input type="number" id="player-count" name="player-count" min="1" max="100" required>
+
+                <button type="submit">Find Code</button>
             </form>
-            
-            <div id="feedback"></div>
         </section>
-        
-        <section id="previous-answers">
-            <h3>Previous Answers:</h3>
-            <ul id="answers-list"></ul>
+
+        <section aria-labelledby="results">
+            <h2 id="results">Results</h2>
+            <div id="results-container">
+                <p>No codes found yet. Please submit the form above.</p>
+            </div>
         </section>
     </main>
-    
+
     <footer>
-        <p>&copy; 2023 Blooket Game</p>
+        <p>&copy; 2023 Blooket Code Finder. All rights reserved.</p>
     </footer>
 
-    <script>
-        const form = document.getElementById('answer-form');
-        const answerInput = document.getElementById('answer');
-        const feedback = document.getElementById('feedback');
-        const answersList = document.getElementById('answers-list');
-        const previousAnswers = new Set(); // To store unique answers
-
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting
-
-            const answer = answerInput.value.trim().toLowerCase();
-
-            // Check if the answer has already been submitted
-            if (previousAnswers.has(answer)) {
-                feedback.textContent = 'You have already submitted this answer. Please try a different one.';
-                feedback.style.color = 'red';
-            } else {
-                // Add the answer to the set and the list
-                previousAnswers.add(answer);
-                const listItem = document.createElement('li');
-                listItem.textContent = answer;
-                answersList.appendChild(listItem);
-                
-                feedback.textContent = 'Answer submitted successfully!';
-                feedback.style.color = 'green';
-            }
-
-            // Clear the input
-            answerInput.value = '';
-        });
-    </script>
+    <script src="script.js"></script> <!-- Link to external JavaScript for functionality -->
 </body>
+
 </html>
