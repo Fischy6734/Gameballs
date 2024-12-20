@@ -3,31 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Emulator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        iframe {
-            width: 80%;
-            height: 80%;
-            border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    <title>Web Game Emulator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <h1>Web Game Emulator</h1>
+        <nav>
+            <ul>
+                <li><a href="#load-game">Load Game</a></li>
+                <li><a href="#controls">Controls</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <main>
-        <h1>Web Emulator</h1>
-        <p>Displaying content from a predefined URL:</p>
-        <iframe src="https://www.example.com" title="Web Emulator Frame"></iframe>
+        <section id="load-game" aria-labelledby="load-game-heading">
+            <h2 id="load-game-heading">Load Your Game</h2>
+            <form id="game-load-form" aria-label="Game Loader">
+                <label for="game-file">Select a game file:</label>
+                <input type="file" id="game-file" accept=".rom,.iso" aria-required="true">
+                <button type="submit">Load Game</button>
+            </form>
+        </section>
+
+        <section id="emulator" aria-labelledby="emulator-heading">
+            <h2 id="emulator-heading">Game Emulator</h2>
+            <div id="game-display" aria-live="polite">
+                <!-- Game rendering will take place here -->
+                <p>Please load a game to start playing.</p>
+            </div>
+        </section>
+
+        <section id="controls" aria-labelledby="controls-heading">
+            <h2 id="controls-heading">Controls</h2>
+            <ul>
+                <li><kbd>Arrow Up</kbd>: Move Up</li>
+                <li><kbd>Arrow Down</kbd>: Move Down</li>
+                <li><kbd>Arrow Left</kbd>: Move Left</li>
+                <li><kbd>Arrow Right</kbd>: Move Right</li>
+                <li><kbd>Z</kbd>: Action</li>
+                <li><kbd>X</kbd>: Cancel</li>
+            </ul>
+        </section>
+
+        <section id="about" aria-labelledby="about-heading">
+            <h2 id="about-heading">About This Emulator</h2>
+            <p>This web emulator allows you to load and play classic games directly in your browser. It supports various game formats and provides an easy-to-use interface for loading games.</p>
+        </section>
     </main>
+
+    <footer>
+        <p>&copy; 2023 Web Game Emulator. All rights reserved.</p>
+        <p><a href="#top">Back to top</a></p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
