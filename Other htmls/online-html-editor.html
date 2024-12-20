@@ -1,65 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Emulator</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
 </head>
-
 <body>
-    <header>
-        <h1>Web Emulator</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="emulator">
-            <h2>Live Emulator</h2>
-            <div class="emulator-display" role="application">
-                <!-- This is where the emulator will be rendered -->
-                <p>Your emulator output will appear here.</p>
-            </div>
-            <form id="emulator-input" aria-label="Emulator Input Form">
-                <label for="user-input">Enter your code:</label>
-                <textarea id="user-input" rows="10" placeholder="Type your HTML/CSS/JS code here..."></textarea>
-                <button type="submit">Run Code</button>
-            </form>
-        </section>
-
-        <section id="features">
-            <h2>Features</h2>
-            <ul>
-                <li>Real-time code execution</li>
-                <li>Support for HTML, CSS, and JavaScript</li>
-                <li>Responsive design preview</li>
-            </ul>
-        </section>
-
-        <section id="about">
-            <h2>About</h2>
-            <p>This web emulator allows you to test your web development skills in a safe and interactive environment.</p>
-        </section>
-
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>If you have any questions, feel free to reach out!</p>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2023 Web Emulator. All rights reserved.</p>
-    </footer>
-
-    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+    <h1>Web Emulator</h1>
+    <iframe src="https://example.com" title="Web Emulator Display" aria-label="Web Emulator for example.com"></iframe>
 </body>
-
 </html>
