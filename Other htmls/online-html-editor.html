@@ -3,62 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Game Emulator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Web Emulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="url"] {
+            width: 300px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Web Game Emulator</h1>
-        <nav>
-            <ul>
-                <li><a href="#load-game">Load Game</a></li>
-                <li><a href="#controls">Controls</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section id="load-game" aria-labelledby="load-game-heading">
-            <h2 id="load-game-heading">Load Your Game</h2>
-            <form id="game-load-form" aria-label="Game Loader">
-                <label for="game-file">Select a game file:</label>
-                <input type="file" id="game-file" accept=".rom,.iso" aria-required="true">
-                <button type="submit">Load Game</button>
-            </form>
-        </section>
+<header>
+    <h1>Web Emulator</h1>
+    <p>Enter a URL to load the website.</p>
+</header>
 
-        <section id="emulator" aria-labelledby="emulator-heading">
-            <h2 id="emulator-heading">Game Emulator</h2>
-            <div id="game-display" aria-live="polite">
-                <!-- Game rendering will take place here -->
-                <p>Please load a game to start playing.</p>
-            </div>
-        </section>
+<main>
+    <form id="urlForm" aria-label="URL input form">
+        <input type="url" id="urlInput" placeholder="Enter website URL" required aria-required="true">
+        <button type="submit">Load Website</button>
+    </form>
 
-        <section id="controls" aria-labelledby="controls-heading">
-            <h2 id="controls-heading">Controls</h2>
-            <ul>
-                <li><kbd>Arrow Up</kbd>: Move Up</li>
-                <li><kbd>Arrow Down</kbd>: Move Down</li>
-                <li><kbd>Arrow Left</kbd>: Move Left</li>
-                <li><kbd>Arrow Right</kbd>: Move Right</li>
-                <li><kbd>Z</kbd>: Action</li>
-                <li><kbd>X</kbd>: Cancel</li>
-            </ul>
-        </section>
+    <iframe id="websiteFrame" title="Website Display"></iframe>
+</main>
 
-        <section id="about" aria-labelledby="about-heading">
-            <h2 id="about-heading">About This Emulator</h2>
-            <p>This web emulator allows you to load and play classic games directly in your browser. It supports various game formats and provides an easy-to-use interface for loading games.</p>
-        </section>
-    </main>
+<script>
+    document.getElementById('urlForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const urlInput = document.getElementById('urlInput').value;
+        const iframe = document.getElementById('websiteFrame');
 
-    <footer>
-        <p>&copy; 2023 Web Game Emulator. All rights reserved.</p>
-        <p><a href="#top">Back to top</a></p>
-    </footer>
+        // Ensure the URL starts with http:// or https://
+        if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
+            alert('Please enter a valid URL starting with http:// or https://');
+            return;
+        }
 
-    <script src="script.js"></script>
+        iframe.src = urlInput;
+    });
+</script>
+
 </body>
 </html>
