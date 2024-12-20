@@ -1,37 +1,33 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Emulator</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #f4f4f4;
-      }
-      iframe {
-        width: 80%;
-        height: 80%;
-        border: none;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-      h1 {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 24px;
-        color: #333;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        iframe {
+            width: 80%;
+            height: 80%;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
     </style>
-  </head>
-  <body>
-    <h1>Web Emulator</h1>
-  </body>
+</head>
+<body>
+    <main>
+        <h1>Web Emulator</h1>
+        <p>Displaying content from a predefined URL:</p>
+        <iframe src="https://www.example.com" title="Web Emulator Frame"></iframe>
+    </main>
+</body>
 </html>
