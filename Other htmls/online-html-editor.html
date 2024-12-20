@@ -3,37 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Water Simulator</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS if needed -->
-    <script src="script.js" defer></script> <!-- Link to external JavaScript file -->
+    <title>AI Physics Water Simulator</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to an external stylesheet -->
+    <script src="script.js" defer></script> <!-- Link to an external JavaScript file -->
 </head>
 <body>
     <header>
-        <h1>AI Water Simulator</h1>
-        <p>Experience the physics of water with AI simulation.</p>
+        <h1>AI Physics Water Simulator</h1>
+        <p>Experience realistic water simulation powered by AI technology.</p>
     </header>
 
     <main>
-        <section id="simulation">
-            <canvas id="waterCanvas" width="800" height="600" aria-label="Water Simulation Canvas"></canvas>
-            <p id="statusMessage">Loading simulation...</p>
+        <section id="simulator">
+            <h2>Water Simulation Area</h2>
+            <canvas id="waterCanvas" aria-label="Water Simulation Canvas"></canvas>
         </section>
 
         <section id="controls">
             <h2>Controls</h2>
-            <button id="startButton">Start Simulation</button>
-            <button id="stopButton">Stop Simulation</button>
-            <button id="resetButton">Reset Simulation</button>
+            <form aria-labelledby="controls">
+                <label for="waveHeight">Wave Height:</label>
+                <input type="range" id="waveHeight" name="waveHeight" min="0" max="100" value="50" aria-describedby="waveHeightDescription">
+                <span id="waveHeightDescription">Adjust the height of the waves.</span>
+
+                <label for="waveFrequency">Wave Frequency:</label>
+                <input type="range" id="waveFrequency" name="waveFrequency" min="1" max="20" value="5" aria-describedby="waveFrequencyDescription">
+                <span id="waveFrequencyDescription">Adjust the frequency of the waves.</span>
+
+                <button type="button" id="startSimulation">Start Simulation</button>
+                <button type="button" id="stopSimulation">Stop Simulation</button>
+            </form>
         </section>
 
-        <section id="instructions">
-            <h2>Instructions</h2>
-            <p>Use the buttons above to control the simulation. Click "Start" to begin, "Stop" to pause, and "Reset" to restart the simulation.</p>
+        <section id="info">
+            <h2>About the Simulator</h2>
+            <p>This simulator uses advanced AI algorithms to create realistic water physics. You can adjust various parameters to see how they affect the simulation.</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2023 AI Water Simulator. All rights reserved.</p>
+        <p>&copy; 2023 AI Physics Water Simulator. All rights reserved.</p>
+        <p>Created by [Your Name].</p>
     </footer>
 </body>
 </html>
