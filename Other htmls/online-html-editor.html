@@ -4,67 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Water Simulator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #e0f7fa;
-        }
-        canvas {
-            border: 1px solid #00796b;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS if needed -->
+    <script src="script.js" defer></script> <!-- Link to external JavaScript file -->
 </head>
 <body>
     <header>
         <h1>AI Water Simulator</h1>
-        <p>Click the button to simulate water movement.</p>
+        <p>Experience the physics of water with AI simulation.</p>
     </header>
+
     <main>
-        <canvas id="waterCanvas" width="600" height="400"></canvas>
-        <button id="simulateButton">Simulate Water</button>
+        <section id="simulation">
+            <canvas id="waterCanvas" width="800" height="600" aria-label="Water Simulation Canvas"></canvas>
+            <p id="statusMessage">Loading simulation...</p>
+        </section>
+
+        <section id="controls">
+            <h2>Controls</h2>
+            <button id="startButton">Start Simulation</button>
+            <button id="stopButton">Stop Simulation</button>
+            <button id="resetButton">Reset Simulation</button>
+        </section>
+
+        <section id="instructions">
+            <h2>Instructions</h2>
+            <p>Use the buttons above to control the simulation. Click "Start" to begin, "Stop" to pause, and "Reset" to restart the simulation.</p>
+        </section>
     </main>
+
     <footer>
-        <p>&copy; 2023 Water Simulation Project</p>
+        <p>&copy; 2023 AI Water Simulator. All rights reserved.</p>
     </footer>
-
-    <script>
-        const canvas = document.getElementById('waterCanvas');
-        const ctx = canvas.getContext('2d');
-        let waveHeight = 20;
-        let waveSpeed = 0.05;
-        let waveOffset = 0;
-
-        function drawWater() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00796b';
-            ctx.beginPath();
-            ctx.moveTo(0, canvas.height);
-            for (let x = 0; x < canvas.width; x++) {
-                const y = canvas.height - waveHeight * Math.sin(x * waveSpeed + waveOffset) - 50;
-                ctx.lineTo(x, y);
-            }
-            ctx.lineTo(canvas.width, canvas.height);
-            ctx.closePath();
-            ctx.fill();
-            waveOffset += 0.1;
-            requestAnimationFrame(drawWater);
-        }
-
-        document.getElementById('simulateButton').addEventListener('click', () => {
-            drawWater();
-        });
-    </script>
 </body>
 </html>
