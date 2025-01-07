@@ -67,8 +67,6 @@ html {
 }
 
 @font-face {
-  font-family: 'MyCustomFont';
-  src: url('Nasalization Rg.otf') format('otf');
-  font-weight: normal;
-  font-style: normal;
+  font-family: "Bonelab"; /* Give your font a name */
+  src: url("Nasalization Rg.otf") format("otf"); /* Font file path and format */
 }
