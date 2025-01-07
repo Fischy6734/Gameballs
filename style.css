@@ -68,5 +68,5 @@ html {
 
 @font-face {
   font-family: "Bonelab"; /* Give your font a name */
-  src: url("Nasalization Rg.otf") format("otf"); /* Font file path and format */
+  src: url("Bonelab.otf") format("otf"); /* Font file path and format */
 }
