@@ -65,3 +65,10 @@ html {
     background-position: var(--s) 0,0 var(--s);
   }
 }
+
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('Nasalization Rg.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
