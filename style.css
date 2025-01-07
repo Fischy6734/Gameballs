@@ -67,6 +67,12 @@ html {
 }
 
 @font-face {
-  font-family: "Bonelab"; /* Give your font a name */
-  src: url("Bonelab.otf") format("otf"); /* Font file path and format */
+font-family: GraublauWeb;
+src: url("Bonelab.otf") format("opentype");
+}
+
+@font-face {
+font-family: GraublauWeb;
+font-weight: bold;
+src: url("Bonelab.otf") format("opentype");
 }
