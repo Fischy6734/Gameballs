@@ -67,12 +67,25 @@ html {
 }
 
 @font-face {
-font-family: GraublauWeb;
-src: url("Bonelab.otf") format("opentype");
+    font-family: 'Nasalization';
+    src: url('Nasalization Rg.otf') format('opentype');
 }
 
-@font-face {
-font-family: GraublauWeb;
-font-weight: bold;
-src: url("Bonelab.otf") format("opentype");
+body {
+    font-family: 'Nasalization', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header, main, footer {
+    padding: 20px;
+}
+
+h1, h2 {
+    margin: 0 0 10px;
+}
+
+p {
+    margin: 0 0 15px;
 }
