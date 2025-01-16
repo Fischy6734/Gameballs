@@ -1,5 +1,79 @@
 <!DOCTYPE html>
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Search Bar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .button-list {
+            margin-top: 20px;
+        }
+        .button-item {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <label for="search-bar">Search for a game:</label>
+        <input type="text" id="search-bar" placeholder="Type game name..." aria-label="Search for a game">
+    </div>
+
+    <div class="button-list" id="button-list">
+        <form action="site1" target="_blank" class="button-item">
+            <input type="submit" value="GAME ONE" />
+        </form>
+        <form action="site2" target="_blank" class="button-item">
+            <input type="submit" value="GAME TWO" />
+        </form>
+        <form action="site3" target="_blank" class="button-item">
+            <input type="submit" value="GAME THREE" />
+        </form>
+        <form action="site4" target="_blank" class="button-item">
+            <input type="submit" value="GAME FOUR" />
+        </form>
+        <form action="site5" target="_blank" class="button-item">
+            <input type="submit" value="GAME FIVE" />
+        </form>
+    </div>
+
+    <script>
+        const searchBar = document.getElementById('search-bar');
+        const buttonList = document.getElementById('button-list');
+        const buttons = buttonList.getElementsByClassName('button-item');
+
+        searchBar.addEventListener('input', function() {
+            const searchTerm = searchBar.value.toUpperCase();
+            for (let i = 0; i < buttons.length; i++) {
+                const button = buttons[i].querySelector('input[type="submit"]');
+                if (button.value.toUpperCase().includes(searchTerm)) {
+                    buttons[i].style.display = '';
+                } else {
+                    buttons[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
+
 <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Ffischy6734.github.io%2FGameballs%2F&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=GameBalls&edge_flat=false"/></a>
 
 <meta name="google-site-verification" content="6_H-ZPIKOjqmkyZTYYcZwYivBIpASmYh3XF5pkU_wpU" />
